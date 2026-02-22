@@ -1,0 +1,52 @@
+<nav id="sidebar">
+    <div class="sidebar-header">
+        <a href="{% url 'dashboard' %}" class="d-flex align-items-center text-decoration-none text-white-50">
+            <i class="bi bi-gem fs-3 me-2"></i>
+            <h3 class="mb-0">SMS Admin</h3>
+        </a>
+    </div>
+
+    <ul class="list-unstyled components">
+        <p class="sidebar-heading text-muted small text-uppercase px-3 mt-4 mb-2">MAIN NAVIGATION</p>
+        
+        <li class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            <a href="{% url 'dashboard' %}" class="sidebar-link">
+                <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="{% if 'student' in request.resolver_match.url_name %}active{% endif %}">
+            <a href="{% url 'student_list' %}" class="sidebar-link">
+                <i class="bi bi-people"></i> <span>Students</span>
+            </a>
+        </li>
+        <li class="{% if 'category' in request.resolver_match.url_name %}active{% endif %}">
+            <a href="{% url 'category_list' %}" class="sidebar-link">
+                <i class="bi bi-tags"></i> <span>Categories</span>
+            </a>
+        </li>
+        
+        <p class="sidebar-heading text-muted small text-uppercase px-3 mt-4 mb-2">ACCOUNT</p>
+        <li class="{% if request.resolver_match.url_name == 'profile' or request.resolver_match.url_name == 'settings' %}active{% endif %}">
+            <a href="#settingsSubmenu" data-bs-toggle="collapse" aria-expanded="{% if request.resolver_match.url_name == 'profile' or request.resolver_match.url_name == 'settings' %}true{% else %}false{% endif %}" class="dropdown-toggle sidebar-link">
+                <i class="bi bi-gear"></i> <span>Settings</span>
+            </a>
+            <ul class="collapse list-unstyled {% if request.resolver_match.url_name == 'profile' or request.resolver_match.url_name == 'settings' %}show{% endif %}" id="settingsSubmenu">
+                <li><a href="{% url 'profile' %}" class="sidebar-link sub-link">Profile</a></li>
+                <li><a href="{% url 'settings' %}" class="sidebar-link sub-link">Edit Settings</a></li>
+            </ul>
+        </li>
+        
+        <li class="mt-auto"> <!-- Push to bottom -->
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="sidebar-link btn btn-link text-danger w-100 text-start ps-4">
+                    <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
+                </button>
+            </form>
+        </li>
+    </ul>
+
+    <div class="sidebar-footer p-3 text-center">
+        <small class="text-muted">© 2026 SMS System</small>
+    </div>
+</nav>

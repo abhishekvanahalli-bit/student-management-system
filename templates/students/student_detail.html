@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4 fade-in-up">
+    <h1 class="h3 mb-0 text-white text-shadow">Student Profile</h1>
+    <a href="{% url 'student_list' %}" class="btn btn-sm btn-outline-light rounded-pill px-3"><i class="bi bi-arrow-left me-2"></i>Back to List</a>
+</div>
+
+<div class="row fade-in-up">
+    <div class="col-md-4">
+        <div class="glass-card">
+            <h5 class="mb-4 border-bottom border-light pb-2 text-primary">Information</h5>
+            <div class="mb-3">
+                <label class="text-muted small mb-0 d-block text-uppercase fw-bold">Full Name</label>
+                <span class="fs-5">{{ student.name }}</span>
+            </div>
+            <div class="mb-3">
+                <label class="text-muted small mb-0 d-block text-uppercase fw-bold">Register Number</label>
+                <span class="fw-bold">{{ student.register_number }}</span>
+            </div>
+            <div class="mb-3">
+                <label class="text-muted small mb-0 d-block text-uppercase fw-bold">Email Address</label>
+                <span>{{ student.email }}</span>
+            </div>
+            <div class="mb-3">
+                <label class="text-muted small mb-0 d-block text-uppercase fw-bold">Course & Dept</label>
+                <span>{{ student.course }} ({{ student.department }})</span>
+            </div>
+            <div class="mb-3">
+                <label class="text-muted small mb-0 d-block text-uppercase fw-bold">Batch</label>
+                <span>{{ student.batch }}</span>
+            </div>
+            <div class="mb-3">
+                <label class="text-muted small mb-0 d-block text-uppercase fw-bold">Account Status</label>
+                <span class="badge bg-{% if student.status == 'Active' %}success{% else %}danger{% endif %} rounded-pill px-3">{{ student.status }}</span>
+            </div>
+            <hr class="border-light">
+            <div class="d-grid gap-2">
+                <a href="{% url 'student_update' student.pk %}" class="btn btn-warning text-white rounded-pill"><i class="bi bi-pencil me-2"></i>Edit Student</a>
+                <a href="{% url 'student_delete' student.pk %}" class="btn btn-outline-danger rounded-pill"><i class="bi bi-trash me-2"></i>Delete Record</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="glass-card">
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-light pb-2">
+                <h5 class="mb-0 text-primary">Achievements List</h5>
+                <a href="{% url 'achievement_add_for_student' student.pk %}" class="btn btn-success btn-sm rounded-pill px-3"><i class="bi bi-plus-circle me-2"></i>Add New</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-glass">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for achievement in achievements %}
+                        <tr>
+                            <td class="fw-bold">{{ achievement.title }}</td>
+                            <td><span class="badge bg-light text-dark border">{{ achievement.category.name }}</span></td>
+                            <td class="small">{{ achievement.date }}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-premium dropdown-toggle px-3 rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ achievement.status }}
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2">
+                                        <li><h6 class="dropdown-header small text-muted text-uppercase fw-bold">Update Status</h6></li>
+                                        <li><a class="dropdown-item text-success fw-bold" href="{% url 'achievement_status_update' achievement.pk 'Approved' %}"><i class="bi bi-check-circle me-2"></i> Approve</a></li>
+                                        <li><a class="dropdown-item text-danger fw-bold" href="{% url 'achievement_status_update' achievement.pk 'Rejected' %}"><i class="bi bi-x-circle me-2"></i> Reject</a></li>
+                                        <li><a class="dropdown-item text-warning fw-bold" href="{% url 'achievement_status_update' achievement.pk 'Pending' %}"><i class="bi bi-clock me-2"></i> Set Pending</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    {% if achievement.proof %}
+                                    <a href="{{ achievement.proof.url }}" target="_blank" class="btn btn-sm btn-outline-info rounded-circle me-1" title="View Proof"><i class="bi bi-file-earmark-text"></i></a>
+                                    {% endif %}
+                                    <a href="{% url 'achievement_update' achievement.pk %}" class="btn btn-sm btn-outline-warning rounded-circle me-1" title="Edit"><i class="bi bi-pencil"></i></a>
+                                    <a href="{% url 'achievement_delete' achievement.pk %}" class="btn btn-sm btn-outline-danger rounded-circle" title="Delete"><i class="bi bi-trash"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted small">No achievements recorded for this student.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

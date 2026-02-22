@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4 fade-in-up">
+    <h1 class="h3 mb-0 text-white text-shadow">Students</h1>
+    <a href="{% url 'student_add' %}" class="d-none d-sm-inline-block btn btn-sm btn-premium shadow-sm"><i
+            class="bi bi-plus-lg fa-sm text-white-50"></i> Add Student</a>
+</div>
+
+<div class="glass-card mb-4 fade-in-up" style="animation-delay: 0.1s;">
+    <div class="card-header bg-transparent border-bottom border-light py-3">
+        <h6 class="m-0 font-weight-bold text-primary">All Students Directory</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-glass" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Reg. No</th>
+                        <th>Email</th>
+                        <th>Course</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td class="fw-bold">{{ student.name }}</td>
+                        <td>{{ student.register_number }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.course }}</td>
+                        <td>
+                            <span class="badge bg-{% if student.status == 'Active' %}success{% else %}secondary{% endif %} rounded-pill px-3 shadow-sm">
+                                {{ student.status }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{% url 'student_detail' student.pk %}" class="btn btn-sm btn-outline-info rounded-circle me-1" title="View"><i class="bi bi-eye"></i></a>
+                                <a href="{% url 'student_update' student.pk %}" class="btn btn-sm btn-outline-warning rounded-circle me-1" title="Edit"><i class="bi bi-pencil"></i></a>
+                                <a href="{% url 'student_delete' student.pk %}" class="btn btn-sm btn-outline-danger rounded-circle" title="Delete"><i class="bi bi-trash"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">No students found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
