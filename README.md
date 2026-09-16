@@ -49,17 +49,21 @@ python manage.py runserver
 - **Dashboard:** http://127.0.0.1:8000/
 - **Admin Panel:** http://127.0.0.1:8000/admin/
 
-## Database Credentials
+## Configuration
 
-Credentials are read from environment variables (via `python-dotenv`), not hardcoded. Copy `.env.example` to `.env` and fill in your local MySQL password:
+All credentials are read from environment variables (via `python-dotenv`), never hardcoded. Copy `.env.example` to `.env` and fill in your own values:
 ```bash
 cp .env.example .env
 ```
-```
-DB_NAME=student_management_db
-DB_USER=root
-DB_PASSWORD=your_mysql_password
-DB_HOST=localhost
-DB_PORT=3306
-```
+- `DB_*` — your local MySQL connection details.
+- `DJANGO_SECRET_KEY` — optional; if unset, a random key is generated each time the app starts (fine for local dev, but sessions won't survive a restart).
+- `ADMIN_*` — used only by `reset_admin.py` (see below); required to run that script.
+
 `.env` is gitignored and should never be committed.
+
+## Resetting the admin user
+
+`reset_admin.py` creates/resets a superuser using `ADMIN_USERNAME`, `ADMIN_EMAIL`, and `ADMIN_RESET_PASSWORD` from your `.env` file:
+```bash
+python reset_admin.py
+```

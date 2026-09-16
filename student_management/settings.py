@@ -1,3 +1,4 @@
+import secrets
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -6,7 +7,10 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = '***ROTATED***'
+# Set DJANGO_SECRET_KEY in your local .env for stable sessions across restarts.
+# Falls back to a random key generated at process start (dev-only; sessions
+# won't persist across restarts) so the app still runs without extra setup.
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') or secrets.token_urlsafe(50)
 
 DEBUG = True
 
