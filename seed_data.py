@@ -1,13 +1,14 @@
+from students.models import Achievement, Category, Student
 import os
-import django
 import random
 from datetime import date, timedelta
+
+import django
 
 # Set up Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'student_management.settings')
 django.setup()
 
-from students.models import Student, Category, Achievement
 
 def seed_data():
     print("Seeding categories...")
@@ -18,12 +19,13 @@ def seed_data():
         ('Technical Innovation', 'Hackathons, projects, and coding competitions.'),
         ('Social Service', 'Volunteer work and community engagement.')
     ]
-    
+
     category_objs = []
     for name, desc in categories:
-        cat, created = Category.objects.get_or_create(name=name, defaults={'description': desc})
+        cat, created = Category.objects.get_or_create(
+            name=name, defaults={'description': desc})
         category_objs.append(cat)
-    
+
     print("Seeding students...")
     student_data = [
         ('Rahul Sharma', 'rahul@example.com', 'REG001', 'B.Tech CS', '2022-26', 'Computer Science'),
@@ -55,9 +57,9 @@ def seed_data():
 
     print("Seeding achievements...")
     titles = [
-        "Gold Medal in Semester", "1st Place in Inter-College Football", 
-        "Best Project Award", "NASA Space Apps Finalist", 
-        "Volunteered at NGO", "Classical Dance Winner", 
+        "Gold Medal in Semester", "1st Place in Inter-College Football",
+        "Best Project Award", "NASA Space Apps Finalist",
+        "Volunteered at NGO", "Classical Dance Winner",
         "Hackathon Runner Up", "Robotics Workshop Lead",
         "Scholarship Recipient", "Outstanding Leadership Award"
     ]
@@ -66,7 +68,7 @@ def seed_data():
         student = random.choice(student_objs)
         category = random.choice(category_objs)
         title = random.choice(titles)
-        
+
         Achievement.objects.create(
             student=student,
             title=title,
@@ -77,6 +79,7 @@ def seed_data():
         )
 
     print("Data seeding completed successfully!")
+
 
 if __name__ == '__main__':
     seed_data()

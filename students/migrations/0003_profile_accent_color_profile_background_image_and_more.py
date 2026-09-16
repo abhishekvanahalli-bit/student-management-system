@@ -13,21 +13,39 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='accent_color',
-            field=models.CharField(default='#4e73df', help_text='Hex code for UI accent color.', max_length=7),
+            field=models.CharField(
+                default='#4e73df',
+                help_text='Hex code for UI accent color.',
+                max_length=7),
         ),
         migrations.AddField(
             model_name='profile',
             name='background_image',
-            field=models.ImageField(blank=True, help_text='Upload a custom background for your dashboard.', null=True, upload_to='backgrounds/'),
+            field=models.ImageField(
+                blank=True,
+                help_text='Upload a custom background for your dashboard.',
+                null=True,
+                upload_to='backgrounds/'),
         ),
         migrations.AddField(
             model_name='profile',
             name='brightness',
-            field=models.IntegerField(default=100, help_text='UI Brightness percentage (50-100).'),
+            field=models.IntegerField(
+                default=100,
+                help_text='UI Brightness percentage (50-100).'),
         ),
         migrations.AddField(
             model_name='profile',
             name='theme_mode',
-            field=models.CharField(choices=[('light', 'Light'), ('dark', 'Dark'), ('auto', 'Auto')], default='auto', max_length=10),
+            field=models.CharField(
+                choices=[
+                    ('light',
+                     'Light'),
+                    ('dark',
+                     'Dark'),
+                    ('auto',
+                     'Auto')],
+                default='auto',
+                max_length=10),
         ),
     ]

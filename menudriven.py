@@ -1,20 +1,19 @@
 import os
 from datetime import datetime
+
 import mysql.connector
-from pymongo import MongoClient
 from dotenv import load_dotenv
+from pymongo import MongoClient
 
 load_dotenv()
 
-# ==================================================
 # MYSQL CONNECTION
-# ==================================================
-# Set DB_PASSWORD (and optionally DB_HOST/DB_USER) in your local .env file
+
 
 mysql_db = mysql.connector.connect(
     host=os.environ.get("DB_HOST", "localhost"),
     user=os.environ.get("DB_USER", "root"),
-    password=os.environ.get("DB_PASSWORD", "")
+    password=os.environ["DB_PASSWORD"]
 )
 
 mysql_cursor = mysql_db.cursor()
@@ -41,17 +40,17 @@ mysql_db.commit()
 
 print("MySQL Database & Table Ready")
 
-# ==================================================
+
 # MONGODB CONNECTION
-# ==================================================
+
 
 mongo_client = MongoClient("mongodb://localhost:27017/")
 mongo_db = mongo_client["student_management_db"]
 mongo_col = mongo_db["student_achievements"]
 
-# ==================================================
+
 # MYSQL FUNCTIONS
-# ==================================================
+
 
 def mysql_insert():
     sql = """
@@ -76,6 +75,7 @@ def mysql_insert():
     except mysql.connector.Error as e:
         print("Error:", e)
 
+
 def mysql_view():
     mysql_cursor.execute("SELECT * FROM student_achievements")
     rows = mysql_cursor.fetchall()
@@ -83,6 +83,7 @@ def mysql_view():
         print("⚠️ No records found")
     for r in rows:
         print(r)
+
 
 def mysql_update():
     reg = input("Enter Register No to Update: ")
@@ -99,6 +100,7 @@ def mysql_update():
     else:
         print("No record found with this Register No")
 
+
 def mysql_delete():
     reg = input("Enter Register No to Delete: ")
 
@@ -113,6 +115,7 @@ def mysql_delete():
     else:
         print("No record found with this Register No")
 
+
 def mysql_filter():
     dept = input("Enter Department: ")
     mysql_cursor.execute(
@@ -125,6 +128,7 @@ def mysql_filter():
     for r in rows:
         print(r)
 
+
 def mysql_aggregate():
     mysql_cursor.execute(
         "SELECT department, COUNT(*) FROM student_achievements GROUP BY department"
@@ -132,9 +136,9 @@ def mysql_aggregate():
     for r in mysql_cursor.fetchall():
         print("Department:", r[0], "| Total:", r[1])
 
-# ==================================================
+
 # MONGODB FUNCTIONS
-# ==================================================
+#
 
 def mongo_insert():
     reg = input("Register No: ")
@@ -155,12 +159,14 @@ def mongo_insert():
     mongo_col.insert_one(doc)
     print("MongoDB Record Inserted")
 
+
 def mongo_view():
     data = list(mongo_col.find())
     if not data:
         print("⚠️ No records found")
     for d in data:
         print(d)
+
 
 def mongo_update():
     reg = input("Enter Register No to Update: ")
@@ -176,6 +182,7 @@ def mongo_update():
     else:
         print("No record found with this Register No")
 
+
 def mongo_delete():
     reg = input("Enter Register No to Delete: ")
 
@@ -186,6 +193,7 @@ def mongo_delete():
     else:
         print("No record found with this Register No")
 
+
 def mongo_filter():
     dept = input("Enter Department: ")
     data = list(mongo_col.find({"department": dept}))
@@ -194,6 +202,7 @@ def mongo_filter():
     for d in data:
         print(d)
 
+
 def mongo_aggregate():
     pipeline = [
         {"$group": {"_id": "$department", "total": {"$sum": 1}}}
@@ -201,9 +210,9 @@ def mongo_aggregate():
     for r in mongo_col.aggregate(pipeline):
         print("Department:", r["_id"], "| Total:", r["total"])
 
-# ==================================================
+
 # MAIN MENU
-# ==================================================
+#
 
 while True:
     print("\n===== STUDENT MANAGEMENT SYSTEM =====")
@@ -223,18 +232,30 @@ while True:
 
     choice = input("Enter your choice: ")
 
-    if choice == "1": mysql_insert()
-    elif choice == "2": mysql_view()
-    elif choice == "3": mysql_update()
-    elif choice == "4": mysql_delete()
-    elif choice == "5": mysql_filter()
-    elif choice == "6": mysql_aggregate()
-    elif choice == "7": mongo_insert()
-    elif choice == "8": mongo_view()
-    elif choice == "9": mongo_update()
-    elif choice == "10": mongo_delete()
-    elif choice == "11": mongo_filter()
-    elif choice == "12": mongo_aggregate()
+    if choice == "1":
+        mysql_insert()
+    elif choice == "2":
+        mysql_view()
+    elif choice == "3":
+        mysql_update()
+    elif choice == "4":
+        mysql_delete()
+    elif choice == "5":
+        mysql_filter()
+    elif choice == "6":
+        mysql_aggregate()
+    elif choice == "7":
+        mongo_insert()
+    elif choice == "8":
+        mongo_view()
+    elif choice == "9":
+        mongo_update()
+    elif choice == "10":
+        mongo_delete()
+    elif choice == "11":
+        mongo_filter()
+    elif choice == "12":
+        mongo_aggregate()
     elif choice == "13":
         print("Program Closed Successfully")
         break

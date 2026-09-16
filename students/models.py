@@ -1,5 +1,6 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
+
 
 class Profile(models.Model):
     THEME_CHOICES = (
@@ -10,15 +11,27 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.png', upload_to='profile_pics')
     bio = models.TextField(blank=True)
-    
+
     # Premium Settings
-    theme_mode = models.CharField(max_length=10, choices=THEME_CHOICES, default='auto')
-    background_image = models.ImageField(upload_to='backgrounds/', blank=True, null=True, help_text="Upload a custom background for your dashboard.")
-    accent_color = models.CharField(max_length=7, default='#4e73df', help_text="Hex code for UI accent color.")
-    brightness = models.IntegerField(default=100, help_text="UI Brightness percentage (50-100).")
+    theme_mode = models.CharField(
+        max_length=10,
+        choices=THEME_CHOICES,
+        default='auto')
+    background_image = models.ImageField(
+        upload_to='backgrounds/',
+        blank=True,
+        null=True,
+        help_text="Upload a custom background for your dashboard.")
+    accent_color = models.CharField(
+        max_length=7,
+        default='#4e73df',
+        help_text="Hex code for UI accent color.")
+    brightness = models.IntegerField(
+        default=100, help_text="UI Brightness percentage (50-100).")
 
     def __str__(self):
         return f'{self.user.username} Profile'
+
 
 class Student(models.Model):
     STATUS_CHOICES = (
@@ -31,11 +44,15 @@ class Student(models.Model):
     course = models.CharField(max_length=100)
     batch = models.CharField(max_length=50)
     department = models.CharField(max_length=100)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Active')
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='Active')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.name} ({self.register_number})"
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -48,20 +65,31 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "Categories"
 
+
 class Achievement(models.Model):
     STATUS_CHOICES = (
         ('Approved', 'Approved'),
         ('Rejected', 'Rejected'),
         ('Pending', 'Pending'),
     )
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='achievements')
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.CASCADE,
+        related_name='achievements')
     title = models.CharField(max_length=255)
     description = models.TextField()
     proof = models.FileField(upload_to='proofs/')
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='achievements')
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='achievements')
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='Pending')
 
     def __str__(self):
         return f"{self.title} - {self.student.name}"

@@ -1,27 +1,20 @@
+from students.models import Profile  # Also import Profile to ensure it exists
+from django.contrib.auth.models import User
 import os
-import sys
+
 import django
 from dotenv import load_dotenv
-
-load_dotenv()
 
 # Set up Django environment BEFORE importing models
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'student_management.settings')
 django.setup()
+load_dotenv()
 
-from django.contrib.auth.models import User
-from students.models import Profile # Also import Profile to ensure it exists
 
 def create_admin():
-    username = os.environ.get('ADMIN_USERNAME', 'Abhishek')
+    username = os.environ.get('ADMIN_USERNAME', 'Abhishek')  # Target the admin user
     email = os.environ.get('ADMIN_EMAIL', 'abhishek@example.com')
-    password = os.environ.get('ADMIN_RESET_PASSWORD')
-
-    if not password:
-        sys.exit(
-            "ADMIN_RESET_PASSWORD is not set. Add it to your local .env file "
-            "before running this script."
-        )
+    password = os.environ['ADMIN_PASSWORD']  # The new password
 
     # Check if user already exists
     if User.objects.filter(username=username).exists():
@@ -30,7 +23,7 @@ def create_admin():
         user.save()
         print(f"Password for existing user '{username}' has been reset.")
     else:
-        # If the target user doesn't exist, create it as a superuser
+        # If 'Abhishek' user doesn't exist, create it as a superuser
         user = User.objects.create_superuser(username, email, password)
         print(f"Superuser '{username}' created successfully.")
 
@@ -40,6 +33,7 @@ def create_admin():
         print(f"Profile created for user: {user.username}")
     else:
         print(f"Profile already exists for user: {user.username}")
+
 
 if __name__ == '__main__':
     create_admin()
