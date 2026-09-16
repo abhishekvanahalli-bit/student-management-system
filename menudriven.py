@@ -1,15 +1,20 @@
+import os
 from datetime import datetime
 import mysql.connector
 from pymongo import MongoClient
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # ==================================================
 # MYSQL CONNECTION
 # ==================================================
+# Set DB_PASSWORD (and optionally DB_HOST/DB_USER) in your local .env file
 
 mysql_db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="***REMOVED***"   # 🔴 apna MySQL password
+    host=os.environ.get("DB_HOST", "localhost"),
+    user=os.environ.get("DB_USER", "root"),
+    password=os.environ.get("DB_PASSWORD", "")
 )
 
 mysql_cursor = mysql_db.cursor()

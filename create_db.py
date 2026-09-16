@@ -1,11 +1,15 @@
+import os
 import MySQLdb
+from dotenv import load_dotenv
 
-# Database configuration from your request
+load_dotenv()
+
+# Database configuration — set DB_PASSWORD (and optionally DB_HOST/DB_USER/DB_PORT) in your local .env file
 db_config = {
-    'host': 'localhost',
-    'user': 'root',
-    'passwd': '***REMOVED***',
-    'port': 3306
+    'host': os.environ.get('DB_HOST', 'localhost'),
+    'user': os.environ.get('DB_USER', 'root'),
+    'passwd': os.environ.get('DB_PASSWORD', ''),
+    'port': int(os.environ.get('DB_PORT', 3306))
 }
 
 try:

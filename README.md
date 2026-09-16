@@ -49,10 +49,17 @@ python manage.py runserver
 - **Dashboard:** http://127.0.0.1:8000/
 - **Admin Panel:** http://127.0.0.1:8000/admin/
 
-## Database Credentials (configured in settings.py)
-- **Engine:** django.db.backends.mysql
-- **Host:** localhost
-- **Port:** 3306
-- **User:** root
-- **Password:** ***REMOVED***
-- **Database:** student_management_db
+## Database Credentials
+
+Credentials are read from environment variables (via `python-dotenv`), not hardcoded. Copy `.env.example` to `.env` and fill in your local MySQL password:
+```bash
+cp .env.example .env
+```
+```
+DB_NAME=student_management_db
+DB_USER=root
+DB_PASSWORD=your_mysql_password
+DB_HOST=localhost
+DB_PORT=3306
+```
+`.env` is gitignored and should never be committed.
